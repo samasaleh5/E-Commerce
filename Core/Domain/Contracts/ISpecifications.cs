@@ -1,4 +1,4 @@
-﻿using Domain.Models;
+﻿ using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +12,8 @@ namespace Domain.Contracts
     {
        Expression<Func<TEntity,bool>>? Criteria { get; }
        List<Expression<Func<TEntity,object>>> IncludeExpression { get; }
-
+       
+       Expression<Func<TEntity,object>>OrderBy { get; }
+       Expression<Func<TEntity,object>>OrderByDesc { get; }
     }
 }
