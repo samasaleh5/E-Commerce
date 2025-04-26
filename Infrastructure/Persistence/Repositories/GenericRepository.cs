@@ -13,6 +13,7 @@ namespace Persistence.Repositories
     public class GenericRepository<TEntity, Tkey>(StoreDBContext context) : IGenericRepository<TEntity, Tkey>
         where TEntity:ModelBase<Tkey>
     {
+        //Return static Query
         public async Task<IEnumerable<TEntity>> GetAllAsync()
         =>await context.Set<TEntity>().ToListAsync();
 
@@ -26,5 +27,16 @@ namespace Persistence.Repositories
         =>context.Set<TEntity>().Update(entity);
         public void Delete(TEntity entity)
         => context.Set<TEntity>().Remove(entity);
+
+        //Return Dynamic Query
+        public async Task<IEnumerable<TEntity>> GetAllAsync(ISpecifications<TEntity, Tkey> Spec)
+        {
+            return await SpecificationEvaluator.CreateQuery(context.Set<TEntity>(), Spec).ToListAsync();
+        }
+
+        public async Task<TEntity> GetByIdAsync(ISpecifications<TEntity, Tkey> Spec)
+        {
+            return await SpecificationEvaluator.CreateQuery(context.Set<TEntity>(), Spec).FirstOrDefaultAsync();
+        }
     }
 }
