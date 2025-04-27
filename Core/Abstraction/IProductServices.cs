@@ -10,7 +10,7 @@ namespace Abstraction
 {
     public interface IProductServices
     {
-        Task<IEnumerable<ProductDto>> GetAllProductsAsync(int? BrandId, int? TypeId,ProductSortingOptions sortingOption);
+        Task<IEnumerable<ProductDto>> GetAllProductsAsync(ProductQueryParams productQuery);
 
         Task<ProductDto> GetProductByIdAsync(int id);
         Task<IEnumerable<BrandDto>> GetAllBrandsAsync();

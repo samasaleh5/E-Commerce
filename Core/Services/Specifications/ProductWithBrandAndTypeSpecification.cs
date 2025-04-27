@@ -11,14 +11,14 @@ namespace Services.Specifications
     public class ProductWithBrandAndTypeSpecification:BaseSpecifications<Product,int>
     {
         //pass null to ctor mean there is no where
-        public ProductWithBrandAndTypeSpecification(int? brandId, int? typeId, ProductSortingOptions sortingOption)
-            : base(p => (!brandId.HasValue || p.BrandId == brandId)
-                     && (!typeId.HasValue || p.TypeId == typeId))
+        public ProductWithBrandAndTypeSpecification(ProductQueryParams productQuery)
+            : base(p => (!productQuery.BrandId.HasValue || p.BrandId == productQuery.BrandId)
+                     && (!productQuery.TypeId.HasValue || p.TypeId == productQuery.TypeId))
         {
             AddInclude(P => P.Brand);
             AddInclude(P => P.Type);
 
-            switch (sortingOption)
+            switch (productQuery.SortingOption)
             {
                 case ProductSortingOptions.NameAsc:
                     AddOrderBy(P => P.Name);
