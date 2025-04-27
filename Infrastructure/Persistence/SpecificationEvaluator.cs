@@ -32,6 +32,11 @@ namespace Persistence
             if(Spec.IncludeExpression is not null && Spec.IncludeExpression.Count > 0)
                 Query = Spec.IncludeExpression.Aggregate(Query, (currentQuery, Exp) => currentQuery.Include(Exp));
 
+            if(Spec.IsPaginated==true)
+            {
+                Query=Query.Skip(Spec.Skip).Take(Spec.Take);
+            }
+
             return Query;
         }
     }

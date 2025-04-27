@@ -37,6 +37,8 @@ namespace Services.Specifications
                 default:
                     break;
             }
+
+            ApplyPagination(productQuery.Pagesize, productQuery.PageIndex);
         }
 
         public ProductWithBrandAndTypeSpecification(int id):base(p=>p.Id==id)

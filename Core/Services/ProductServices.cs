@@ -25,14 +25,18 @@ namespace Services
             return MappedBrands;
         }
 
-        public async Task<IEnumerable<ProductDto>> GetAllProductsAsync(ProductQueryParams productQuery)
+        public async Task<PaginatedResult<ProductDto>> GetAllProductsAsync(ProductQueryParams productQuery)
         {
             var _Repository = unitOfWork.GetRepository<Product, int>();
             var Spec = new ProductWithBrandAndTypeSpecification(productQuery);// has 2 Include Without Where
             var products = await _Repository.GetAllAsync(Spec);
 
+           
             var MappedProducts = mapper.Map<IEnumerable<Product>, IEnumerable<ProductDto>>(products);
-            return MappedProducts;
+
+            var CountedProducts=products.Count();
+
+            return new PaginatedResult<ProductDto>(productQuery.PageIndex, CountedProducts,0,MappedProducts);
         }
 
         public async Task<IEnumerable<TypeDto>> GetAllTypesAsync()

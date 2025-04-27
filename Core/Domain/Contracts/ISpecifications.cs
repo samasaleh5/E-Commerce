@@ -15,5 +15,12 @@ namespace Domain.Contracts
        
        Expression<Func<TEntity,object>>OrderBy { get; }
        Expression<Func<TEntity,object>>OrderByDesc { get; }
+
+       public int Take { get; }
+       public int Skip { get; }
+
+       //For Frontend want to apply pagination or not
+       public bool IsPaginated { get; set; }
+
     }
 }
