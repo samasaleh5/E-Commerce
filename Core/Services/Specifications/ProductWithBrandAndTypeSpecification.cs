@@ -13,7 +13,9 @@ namespace Services.Specifications
         //pass null to ctor mean there is no where
         public ProductWithBrandAndTypeSpecification(ProductQueryParams productQuery)
             : base(p => (!productQuery.BrandId.HasValue || p.BrandId == productQuery.BrandId)
-                     && (!productQuery.TypeId.HasValue || p.TypeId == productQuery.TypeId))
+                     && (!productQuery.TypeId.HasValue || p.TypeId == productQuery.TypeId)
+                     && (string.IsNullOrEmpty(productQuery.SearchValue)||p.Name.ToLower().Contains(productQuery.SearchValue.ToLower())))
+
         {
             AddInclude(P => P.Brand);
             AddInclude(P => P.Type);
