@@ -1,6 +1,7 @@
 
 using Abstraction;
 using Domain.Contracts;
+using E_Commerce.Web.CustomMiddlewares;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Data;
 using Persistence.Repositories;
@@ -42,6 +43,8 @@ namespace E_Commerce.Web
 
             #region  MiddleWares -Configire Piplines
             // Configure the HTTP request pipeline.
+            app.UseMiddleware<CustomExceptionMiddleware>();
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
