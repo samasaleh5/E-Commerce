@@ -1,4 +1,5 @@
-﻿using Shared.ErrorModels;
+﻿using Domain.Exceptions;
+using Shared.ErrorModels;
 using System.Text.Json;
 
 namespace E_Commerce.Web.CustomMiddlewares
@@ -18,6 +19,18 @@ namespace E_Commerce.Web.CustomMiddlewares
             try
             {
                 await next.Invoke(httpContext);
+                if (httpContext.Response.StatusCode == StatusCodes.Status404NotFound)
+                {
+                    var Response = new ErrorToReturn()
+                    {
+                        StatusCode = httpContext.Response.StatusCode,
+                        ErrorMessage = $"End Point {httpContext.Request.Path} is Not Found",
+                    };
+                    //return object as JSON
+                    var ResponseToReturn = JsonSerializer.Serialize(Response);
+
+                    await httpContext.Response.WriteAsync(ResponseToReturn);
+                }
             }
             catch (Exception ex)
             {
@@ -26,7 +39,14 @@ namespace E_Commerce.Web.CustomMiddlewares
                 logger.LogError(ex, "Something Wrong!!!");
 
                 //Set Status code for response
-                httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                //httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                httpContext.Response.StatusCode = ex switch
+                {
+                    NotFoundException=>StatusCodes.Status404NotFound,
+
+                    //default case
+                    _=>StatusCodes.Status500InternalServerError
+                };
                 //set content type for response
                 httpContext.Response.ContentType = "application/json";
                 //response object
