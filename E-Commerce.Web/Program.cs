@@ -3,11 +3,13 @@ using Abstraction;
 using Domain.Contracts;
 using E_Commerce.Web.CustomMiddlewares;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Data;
 using Persistence.Repositories;
 using Services;
 using Shared.ErrorModels;
+using StackExchange.Redis;
 
 namespace E_Commerce.Web
 {
@@ -55,6 +57,14 @@ namespace E_Commerce.Web
                 };
 
             });
+
+            builder.Services.AddScoped<IBasketRepository,BasketRepository>();
+            builder.Services.AddSingleton<IConnectionMultiplexer>((_) =>
+            {
+                return ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("RedisConnectionString"));
+
+            });
+
             
             #endregion
 
